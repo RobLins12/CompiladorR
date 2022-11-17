@@ -8,7 +8,7 @@
 <expr_arit> ::= <termo> <EA>
 <EA> ::= + <termo> <EA> | - <termo> <EA> | Ø
 <termo> ::= <fator> <TL> 
-<TL> ::= * <fator> | / <fator> | Ø
+<TL> ::= * <fator> <TL>| / <fator> <TL>| Ø
 <fator> ::= ( <expr_arit> )| <id>| <float>| <inteiro>| <char>
 
 Declaracões:

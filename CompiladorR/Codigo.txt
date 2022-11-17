@@ -1,6 +1,12 @@
 int main(){
 
     int n;
-
+    while(10 >= 10){
+        char a;
+        if(10+10 == 30){
+            char n;
+            n = 30 * 20;
+        }
+    }
 }
 $
