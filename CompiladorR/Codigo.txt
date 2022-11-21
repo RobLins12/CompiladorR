@@ -1,18 +1,21 @@
 int main(){
 
     int n;
-    int j;
+    int c;
     char b;
     float a;
+    float jun;
     
     if(10 + 10 == 20){
         n = 30 * 20;
+        b = 'a';
+        a = 0.5;
     }
     else{
-        n = 40 *20;
+        n = 40 * 20;
     }
     while(10 > 40){
-        a = b;
+        a = jun;
     }
 }
     

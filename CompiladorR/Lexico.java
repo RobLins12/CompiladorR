@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 public class Lexico {
     private char[] conteudo;
     private int indiceConteudo;
+    public static int linha = 1;
     
     public Lexico(String caminhoCodigoFonte){
         try {
@@ -75,13 +76,17 @@ public class Lexico {
         Token token = null;
         char c;
         int estado = 0;
-        
+
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
             c = this.nextChar();            
             switch(estado){
                 case 0:
-                    if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
+                    if(c == ' ' || c == '\t' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
+                        estado = 0;
+                    }
+                    else if (c == '\n') {
+                        linha++;
                         estado = 0;
                     }
                     else if(this.isDigito(c)){

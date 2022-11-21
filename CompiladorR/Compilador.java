@@ -4,7 +4,7 @@ public class Compilador {
 
     public static void main(String[] args) {
         Lexico lexico = new Lexico("/workspace/CompiladorR/CompiladorR/Codigo.txt");
-        Sintatico sintatico = new Sintatico(lexico);
+        Semantico sintatico = new Semantico(lexico);
         
         sintatico.programa();
         Token t = null;

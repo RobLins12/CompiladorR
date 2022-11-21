@@ -1,11 +1,15 @@
 package CompiladorR;
 
-public class Sintatico {
+import java.util.HashMap;
+
+public class Semantico {
     
     private Lexico scanner;
     private Token currToken;
+    private HashMap<String, String> vMap = new HashMap<>();
+    private String idAtual;
 
-    public Sintatico(Lexico scanner){
+    public Semantico(Lexico scanner){
         this.scanner = scanner;
     }
 
@@ -21,13 +25,13 @@ public class Sintatico {
                         currToken = scanner.nextToken();
                         bloco();
                     } else {
-                        throw new RuntimeException("Erro na iniciação do programa Esperado: )"); 
+                        throw new RuntimeException("Erro na iniciação do programa Esperado: ) int Got: " + currToken.getLexema() + " at line " + Lexico.linha);
                     }
                 } else {
-                    throw new RuntimeException("Erro na iniciação do programa Esperado: (");
+                    throw new RuntimeException("Erro na iniciação do programa Esperado: ( Got: " + currToken.getLexema() + " at line " + Lexico.linha);
                 }
             } else {
-                throw new RuntimeException("Erro na iniciação do programa Esperado: main");
+                throw new RuntimeException("Erro na iniciação do programa Esperado: main Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
         }else{
             throw new RuntimeException("Erro na iniciação do programa Esperado: int Got: " + currToken.getLexema() + " at line " + Lexico.linha);
@@ -51,10 +55,10 @@ public class Sintatico {
             if (currToken.getLexema().equals("}")) {
                 currToken = scanner.nextToken();
             }else{
-                throw new RuntimeException("Bloco mal formatado");
+                throw new RuntimeException("Bloco mal formatado Esperado: } Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             } 
         }else{
-            throw new RuntimeException("Bloco mal formatado");
+            throw new RuntimeException("Bloco mal formatado Esperado: { Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -76,12 +80,14 @@ public class Sintatico {
         } else if(currToken.getLexema().equals("{")) {
             bloco();
         }else{
-            throw new RuntimeException("Comando básico inválido");
+            throw new RuntimeException("Comando básico inválido Esperado: 'Atribuicao' ou  'Bloco' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
     public void atribuição() {
         if (currToken.getTipo() == 3) {
+            String Id = currToken.getLexema();
+            this.idAtual = Id;
             currToken = scanner.nextToken();
             if (currToken.getLexema().equals("=")) {
                 currToken = scanner.nextToken();
@@ -89,13 +95,13 @@ public class Sintatico {
                 if (currToken.getLexema().equals(";")) {
                     currToken = scanner.nextToken();
                 } else{
-                    throw new RuntimeException("Atribuicao inválida"); 
+                    throw new RuntimeException("Atribuicao inválida Esperado: ; Got: " + currToken.getLexema() + " at line " + Lexico.linha);
                 }
             } else {
-                throw new RuntimeException("Atribuicao inválida"); 
+                throw new RuntimeException("Atribuicao inválida Esperado: = Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
         }else{
-            throw new RuntimeException("Atribuicao inválida"); 
+            throw new RuntimeException("Atribuicao inválida Esperado: 'Identificador' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -180,7 +186,20 @@ public class Sintatico {
                 throw new RuntimeException("Fator mal formatado");
             }
         }else if (currToken.getTipo() == 0 || currToken.getTipo() == 1 || currToken.getTipo() == 2 || currToken.getTipo() == 3) {
-            currToken = scanner.nextToken();
+            String tipo = vMap.get(this.idAtual);
+            if (tipo == null) {
+                currToken = scanner.nextToken();
+            } else if (currToken.getTipo() == 0 && tipo.equals("int")) {
+                currToken = scanner.nextToken();
+            } else if(currToken.getTipo() == 1 && tipo.equals("float")){
+                currToken = scanner.nextToken();
+            } else if(currToken.getTipo() == 2 && tipo.equals("char")){
+                currToken = scanner.nextToken();
+            } else if(currToken.getTipo() == 3 && tipo.equals(vMap.get(currToken.getLexema()))){
+                currToken = scanner.nextToken();
+            }else{
+                throw new RuntimeException("Erro na analise Semântica, tipos de variável não condizem at line " + Lexico.linha);
+            }
         }else{
             throw new RuntimeException("Fator mal formatado");
         }
@@ -190,20 +209,27 @@ public class Sintatico {
         if ((currToken.getLexema().equals("int")||
         currToken.getLexema().equals("float") ||
         currToken.getLexema().equals("char") )) {
+            String Tipo = currToken.getLexema();
             currToken = scanner.nextToken();   
             if (currToken.getTipo() == Token.TIPO_IDENTIFICADOR) {
+                String Id = currToken.getLexema();
                 currToken = scanner.nextToken();  
                 if (currToken.getLexema().equals(";")) {
+                    if (vMap.get(Id) == null) {
+                        vMap.put(Id, Tipo);
+                    }else{
+                        throw new RuntimeException("Váriaveis repetidas at line " + Lexico.linha);
+                    } 
                     currToken = scanner.nextToken();  
                 }else{
-                    throw new RuntimeException("Declaração de variável mal formatada");
+                    throw new RuntimeException("Declaracao de variável inválida Esperado: ; Got: " + currToken.getLexema() + " at line " + Lexico.linha);
                 }
             } 
             else{
-                throw new RuntimeException("Declaração de variável mal formatada");
+                throw new RuntimeException("Declaracao de variável inválida Esperado: 'Identificador' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
         }else{
-            throw new RuntimeException("Declaração de variável mal formatada");
+            throw new RuntimeException("Declaracao de variável inválida Esperado: 'Tipo de Variável' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 }
