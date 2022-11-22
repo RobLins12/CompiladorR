@@ -4,10 +4,11 @@ int main(){
     int c;
     char b;
     float a;
-    float jun;
-    
-    if(10 + 10 == 20){
-        n = 30 * 20;
+
+    n = 10 + 10 + 5 / 5;
+
+    if(10 + 10 >= 20){
+        s = 30 * 20;
         b = 'a';
         a = 0.5;
     }
@@ -15,7 +16,7 @@ int main(){
         n = 40 * 20;
     }
     while(10 > 40){
-        a = jun;
+        a = 10.5;
     }
 }
     

@@ -13,6 +13,10 @@ public class Semantico {
         this.scanner = scanner;
     }
 
+    public void DVE(){
+
+    }
+
     public void programa(){
         currToken = scanner.nextToken();
         if (currToken.getLexema().equals("int")) {
@@ -71,6 +75,8 @@ public class Semantico {
         }
         else if(currToken.getTipo() == 3 || currToken.getLexema().equals("{")) {
             comandoBasico();
+        }else{
+            throw new RuntimeException("Comando não existe Esperado: 'Comando' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -188,7 +194,7 @@ public class Semantico {
         }else if (currToken.getTipo() == 0 || currToken.getTipo() == 1 || currToken.getTipo() == 2 || currToken.getTipo() == 3) {
             String tipo = vMap.get(this.idAtual);
             if (tipo == null) {
-                currToken = scanner.nextToken();
+                throw new RuntimeException("Erro na analise Semântica, variável não existe at line " + Lexico.linha);
             } else if (currToken.getTipo() == 0 && tipo.equals("int")) {
                 currToken = scanner.nextToken();
             } else if(currToken.getTipo() == 1 && tipo.equals("float")){
