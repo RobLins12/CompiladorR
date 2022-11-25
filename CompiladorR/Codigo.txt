@@ -1,21 +1,17 @@
 int main(){
-
     int n;
     int c;
     char b;
     float a;
-
     n = 10 + 10 + 5 / 5;
-
     if(10 + 10 >= 20){
-        s = 30 * 20;
         b = 'a';
         a = 0.5;
     }
     else{
-        n = 40 * 20;
+        n = 40 * 20 + (3 * 7);
     }
-    while(10 > 40){
+    while(c > 40){
         a = 10.5;
     }
 }

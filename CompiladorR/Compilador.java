@@ -7,10 +7,6 @@ public class Compilador {
         Semantico sintatico = new Semantico(lexico);
         
         sintatico.programa();
-        Token t = null;
-        while((t = lexico.nextToken()) != null){  
-            System.out.println(t.toString());
-        }
-        
+        System.out.println("Deu tudo certo!!");
     }
 }

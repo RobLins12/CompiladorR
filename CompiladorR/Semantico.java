@@ -145,8 +145,15 @@ public class Semantico {
     }
 
     public void expr_relacional() {
+        if (currToken.getTipo() == 3) {
+            String Id = currToken.getLexema();
+            this.idAtual = Id;
+        }
         expr_arit();
-        if (currToken.getTipo() == 4) {
+        if (currToken.getLexema().equals(")")) {
+            return;
+        }
+        else if (currToken.getTipo() == 4) {
             currToken = scanner.nextToken();
             expr_arit();
         }else{
