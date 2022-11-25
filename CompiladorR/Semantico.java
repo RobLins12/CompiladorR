@@ -13,10 +13,6 @@ public class Semantico {
         this.scanner = scanner;
     }
 
-    public void DVE(){
-
-    }
-
     public void programa(){
         currToken = scanner.nextToken();
         if (currToken.getLexema().equals("int")) {
@@ -75,8 +71,6 @@ public class Semantico {
         }
         else if(currToken.getTipo() == 3 || currToken.getLexema().equals("{")) {
             comandoBasico();
-        }else{
-            throw new RuntimeException("Comando não existe Esperado: 'Comando' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -94,6 +88,10 @@ public class Semantico {
         if (currToken.getTipo() == 3) {
             String Id = currToken.getLexema();
             this.idAtual = Id;
+            String tipo = vMap.get(Id);
+            if (tipo == null) {
+                throw new RuntimeException("Erro na analise semântica, variável não existe at line "  + Lexico.linha);
+            }
             currToken = scanner.nextToken();
             if (currToken.getLexema().equals("=")) {
                 currToken = scanner.nextToken();
@@ -119,10 +117,10 @@ public class Semantico {
             if (currToken.getLexema().equals(")")) {
                 currToken = scanner.nextToken();
             }else{
-                throw new RuntimeException("Iteração mal formatada");
+                throw new RuntimeException("Iteração mal formatada Esperado: ) Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
         }else{
-            throw new RuntimeException("Iteração mal formatada");
+            throw new RuntimeException("Iteração mal formatada Esperado: ( Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -139,10 +137,10 @@ public class Semantico {
                         comando();
                     }
                 } else {
-                    throw new RuntimeException("Condicional mal formatado");
+                    throw new RuntimeException("Condicional mal formatada Esperado: ) Got: " + currToken.getLexema() + " at line " + Lexico.linha);
                 }
             }else{
-                throw new RuntimeException("Condicional mal formatado");
+                throw new RuntimeException("Condicional mal formatada Esperado: ( Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
     }
 
@@ -152,7 +150,7 @@ public class Semantico {
             currToken = scanner.nextToken();
             expr_arit();
         }else{
-            throw new RuntimeException("Expr relacional mal formatada");
+            throw new RuntimeException("Expressão relacional mal formatada Esperado: 'Operador relacional' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
@@ -189,12 +187,12 @@ public class Semantico {
             if (currToken.getLexema().equals(")")) {
                 currToken = scanner.nextToken();
             }else{
-                throw new RuntimeException("Fator mal formatado");
+                throw new RuntimeException("Fator mal formatado Esperado: ) Got: " + currToken.getLexema() + " at line " + Lexico.linha);
             }
         }else if (currToken.getTipo() == 0 || currToken.getTipo() == 1 || currToken.getTipo() == 2 || currToken.getTipo() == 3) {
             String tipo = vMap.get(this.idAtual);
             if (tipo == null) {
-                throw new RuntimeException("Erro na analise Semântica, variável não existe at line " + Lexico.linha);
+                currToken = scanner.nextToken();
             } else if (currToken.getTipo() == 0 && tipo.equals("int")) {
                 currToken = scanner.nextToken();
             } else if(currToken.getTipo() == 1 && tipo.equals("float")){
@@ -207,7 +205,7 @@ public class Semantico {
                 throw new RuntimeException("Erro na analise Semântica, tipos de variável não condizem at line " + Lexico.linha);
             }
         }else{
-            throw new RuntimeException("Fator mal formatado");
+            throw new RuntimeException("Fator mal formatado Esperado: ( ou 'Id' ou 'Variavel' Got: " + currToken.getLexema() + " at line " + Lexico.linha);
         }
     }
 
