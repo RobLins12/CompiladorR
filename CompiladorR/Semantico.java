@@ -72,6 +72,9 @@ public class Semantico {
         else if(currToken.getTipo() == 3 || currToken.getLexema().equals("{")) {
             comandoBasico();
         }
+        else{
+            throw new RuntimeException("Erro, comando não existe at line " + Lexico.linha);
+        }
     }
 
     public void comandoBasico() {
